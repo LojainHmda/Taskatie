@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tasktie/core/utils/colors.dart';
 
-TextStyle getTitleTesxtStyle(){
-return TextStyle(color: AppColores.primaryColor,fontSize:40,fontWeight: FontWeight.bold);
+TextStyle getTitleTesxtStyle({double? fontSize}){
+return TextStyle(color: AppColores.primaryColor,fontSize:fontSize??40,fontWeight: FontWeight.bold);
 }
 
 TextStyle getTesxtStyle(){
