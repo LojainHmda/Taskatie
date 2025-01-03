@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:tasktie/core/functions.dart';
 import 'package:tasktie/core/utils/colors.dart';
 import 'package:tasktie/core/utils/text_style.dart';
@@ -24,9 +25,29 @@ class _UploadScreenState extends State<UploadScreen> {
     return Scaffold(
       appBar: AppBar(actions: [
         TextButton(
-            onPressed: () {
-              if (key.currentState!.validate()) {
+            onPressed: () async{
+              if (key.currentState!.validate() && path!= null) {
+                var box =await Hive.openBox('user');
+                var userBox =Hive.box('user');
+                userBox.put('name',textController.text);
+                userBox.put('image',path);
                 pushWithReplacement(context, HomeScreen(textController.text));
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Center(child: Text("Erorr",style: getTitleTesxtStyle(),)),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("OK"))
+                        ],
+                        content: Text("something is wrong",style:getTesxtStyle()),
+                      );
+                    });
               }
             },
             child: Text(
@@ -91,11 +112,14 @@ class _UploadScreenState extends State<UploadScreen> {
               key: key,
               child: TextFormField(
                 validator: (value) {
-                  if (value.toString().length < 3) {
-                    return "retry";
+                  if (value!.trim().isEmpty) {
+                    return "Value cannot be just spaces.";
                   }
-                  else if (value.toString().startsWith("t")) {
-                    return "tttttttttt";
+                  if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                    return "Only letters are allowed.";
+                  }
+                  if (value.length < 3) {
+                    return "Please enter at least 3 letters.";
                   }
                   return null;
                 },

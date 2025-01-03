@@ -14,7 +14,7 @@ return TextStyle(color: AppColores.hintColor,fontSize:15);
 }
 
 TextStyle getCustomTesxtStyle({double? fontSize,Color? color}){
-return TextStyle(color: color??AppColores.textColor,fontSize:fontSize??18,fontWeight: FontWeight.normal);
+return TextStyle(color: color??AppColores.textColor,fontSize:fontSize??18,fontWeight: FontWeight.bold);
 }
 
 
