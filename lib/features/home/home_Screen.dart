@@ -10,18 +10,17 @@ import 'package:intl/intl.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 
 class HomeScreen extends StatefulWidget {
-  String controller;
-  HomeScreen(this.controller, {super.key});
+  HomeScreen( {super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
+  @override  
+ late var selectedValue ;  
   Widget build(BuildContext context) {
     var userBox = Hive.box('user');
-    late var selectedValue;
     return Scaffold(
       body: Column(
         children: [
@@ -37,27 +36,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          
           CustomRow(
               txt1: "${DateFormat("MMM,dd,yyyy").format(DateTime.now())}",
               txt2: "Today",
-              widget: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: CustomButton(
-                    txt: " + Add Task",
-                    onPressed: () {},
-                    width: 145,
-                    height: 60),
-              )),
-          SizedBox(
-            height: 10,
-          ),
+              widget: CustomButton(
+                  txt: " + Add Task",
+                  onPressed: () {},
+                  width: 145,
+                  height: 60)),
           DatePicker(
-            
             DateTime.now(),
-            height: 100,
+            height: 120,
             width: 80,
             initialSelectedDate: DateTime.now(),
             selectionColor: AppColores.hintColor,
@@ -68,6 +58,39 @@ class _HomeScreenState extends State<HomeScreen> {
               });
             },
           ),
+          Expanded(
+              child: ListView.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                child: CustomRow(
+                  icon: Icon(Icons.watch_later_outlined),
+                  txt1: "Flutter Task 1",
+                  txt2: "10:00 Am: 11:00 Am",
+                  widget: Row(
+                    children: [
+                      Container(
+                        height: 50,
+                        width: 1.5,
+                        color: AppColores.textColor,
+                      ),
+                      RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(
+                          "TODO",
+                          style: getTesxtStyle(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                      color: AppColores.primaryColor,
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              );
+            },
+          ))
         ],
       ),
     );

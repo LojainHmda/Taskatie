@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:tasktie/core/utils/colors.dart';
 import 'package:tasktie/core/functions.dart';
+import 'package:tasktie/features/home/home_Screen.dart';
 import 'package:tasktie/features/upload/upload_screen.dart';
 import '../../core/utils/text_style.dart';
 import 'package:lottie/lottie.dart';
@@ -14,12 +16,22 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3),() {
-   pushWithReplacement(context, UploadScreen());
-    },);
+    var userBox = Hive.box('user');
+    print(userBox.get("isUploaded"));
+    Future.delayed(
+      Duration(seconds: 3),
+      () {
+        if (userBox.get("isUploaded")!=true) {
+          pushWithReplacement(context, UploadScreen());
+        } else {
+          pushWithReplacement(context, HomeScreen());
+        }
+      },
+    );
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
@@ -27,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Lottie.asset("./assets/images/logo.json"),
-           const SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text("Taskatie", style: getTitleTesxtStyle()),

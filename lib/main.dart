@@ -4,21 +4,20 @@ import 'package:hive_flutter/adapters.dart';
 
 import 'features/intro/splash_screen.dart';
 
-Future<void> main() async {  
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    await Hive.initFlutter();
-
-  runApp( MyApp());
+  await Hive.initFlutter();
+  await Hive.openBox('user');
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-     debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       home: SplashScreen(),
     );
   }

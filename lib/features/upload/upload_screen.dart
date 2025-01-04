@@ -27,11 +27,13 @@ class _UploadScreenState extends State<UploadScreen> {
         TextButton(
             onPressed: () async{
               if (key.currentState!.validate() && path!= null) {
-                var box =await Hive.openBox('user');
                 var userBox =Hive.box('user');
+                
                 userBox.put('name',textController.text);
                 userBox.put('image',path);
-                pushWithReplacement(context, HomeScreen(textController.text));
+                 userBox.put('isUploaded',true);
+
+                pushWithReplacement(context, HomeScreen());
               } else {
                 showDialog(
                     context: context,

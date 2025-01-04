@@ -10,40 +10,46 @@ class CustomRow extends StatelessWidget {
     required this.txt1,
     required this.txt2,
     required this.widget,
-
+    this.decoration,
+    this.icon,
   });
 
   final String txt1;
-    final String txt2;
-    final Widget widget;
-
+  final String txt2;
+  final Widget widget;
+  final Decoration? decoration;
+  final Icon? icon;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+    return Container(
+      padding: EdgeInsets.all(15),
+      decoration: decoration,
+      child: Row(
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-               txt1,
-                style:
-                    getCustomTesxtStyle(color: AppColores.primaryColor),
+                txt1,
+                style: getCustomTesxtStyle(color: Colors.black),maxLines: 1,overflow: TextOverflow.ellipsis,
               ),
-              Text(
-               txt2,
-                style:
-                    getCustomTesxtStyle(color: AppColores.primaryColor),
-              )
+              Row(
+                children: [
+                  icon ?? SizedBox.shrink(),
+                  Text(
+                    txt2,
+                    style:
+                        getCustomTesxtStyle(color: Colors.black),
+                  )
+                ],
+              ),
             ],
           ),
-        ),
-        Spacer(),
-        widget,
-       
-      ],
+          Spacer(),
+          widget,
+        ],
+      ),
     );
   }
 }
