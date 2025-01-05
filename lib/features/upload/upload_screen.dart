@@ -9,6 +9,8 @@ import 'package:tasktie/core/wigdets/custom_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tasktie/features/home/home_Screen.dart';
 
+import '../../core/wigdets/custom_text_field.dart';
+
 class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
 
@@ -112,33 +114,18 @@ class _UploadScreenState extends State<UploadScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Form(
               key: key,
-              child: TextFormField(
-                validator: (value) {
-                  if (value!.trim().isEmpty) {
-                    return "Value cannot be just spaces.";
-                  }
-                  if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-                    return "Only letters are allowed.";
-                  }
-                  if (value.length < 3) {
-                    return "Please enter at least 3 letters.";
-                  }
-                  return null;
-                },
-                controller: textController,
-                decoration: InputDecoration(
-                    hintText: "Enter your name..",
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColores.primaryColor,
-                        ),
-                        borderRadius: BorderRadius.circular(23)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColores.primaryColor,
-                        ),
-                        borderRadius: BorderRadius.circular(23))),
-              ),
+              child: CustomTextFormField(hintText: "Enter your name...",textController: textController,validation: (value) {
+        if (value!.trim().isEmpty) {
+          return "Value cannot be just spaces.";
+        }
+        if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+          return "Only letters are allowed.";
+        }
+        if (value.length < 3) {
+          return "Please enter at least 3 letters.";
+        }
+        return null;
+      },),
             ),
           ),
         ],

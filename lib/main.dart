@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:tasktie/core/utils/colors.dart';
 
 import 'features/intro/splash_screen.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(appBarTheme: AppBarTheme(backgroundColor: AppColores.primaryColor)),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
     );

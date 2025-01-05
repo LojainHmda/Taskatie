@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:tasktie/core/functions.dart';
 import 'package:tasktie/core/utils/colors.dart';
 import 'package:tasktie/core/utils/text_style.dart';
 import 'package:tasktie/core/wigdets/custom_button.dart';
 import 'package:tasktie/core/wigdets/custom_row.dart';
 import 'package:intl/intl.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:tasktie/features/addTask/add_task_screen.dart';
+import 'package:tasktie/features/upload/upload_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen( {super.key});
@@ -20,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override  
  late var selectedValue ;  
   Widget build(BuildContext context) {
+
     var userBox = Hive.box('user');
     return Scaffold(
       body: Column(
@@ -36,13 +40,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          
+          ElevatedButton(onPressed: (){pushTo(context, UploadScreen());}, child: Text("nav")),
           CustomRow(
               txt1: "${DateFormat("MMM,dd,yyyy").format(DateTime.now())}",
               txt2: "Today",
               widget: CustomButton(
                   txt: " + Add Task",
-                  onPressed: () {},
+                  onPressed: () {
+                    pushTo(context, AddTaskScreen());
+                  },
                   width: 145,
                   height: 60)),
           DatePicker(
