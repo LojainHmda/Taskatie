@@ -19,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     var userBox = Hive.box('user');
-    print(userBox.get("isUploaded"));
     Future.delayed(
       Duration(seconds: 3),
       () {
