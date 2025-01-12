@@ -45,7 +45,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             key: formKey,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              TextPrimary(txt: "Title"),
+              const TextPrimary(txt: "Title"),
               CustomTextFormField(
                   textController: titleController,
                   validation: (value) {
@@ -57,7 +57,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     }
                     ;
                   }),
-              TextPrimary(txt: "Note"),
+              const TextPrimary(txt: "Note"),
               CustomTextFormField(
                 textController: noteController,
                 max: 5,
@@ -71,7 +71,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ;
                 },
               ),
-              TextPrimary(txt: "Date"),
+              const TextPrimary(txt: "Date"),
               CustomTextFormField(
                   textController: dateController,
                   icon: IconButton(
@@ -88,7 +88,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           }
                         });
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.calendar_month_outlined,
                         color: AppColores.primaryColor,
                       ))),
@@ -97,14 +97,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   Expanded(
                     child: Column(
                       children: [
-                        TextPrimary(txt: "Start Time"),
+                        const TextPrimary(txt: "Start Time"),
                         CustomTextFormField(
                           readonly: true,
                           textController: startController,
                           validation: (time) {
                             if (time != null) {
-                              if (time == TimeOfDay.now()) {
-                                return "Invalid ";
+                              var start = DateFormat("dd/MM/yyyy hh:mm a")
+                                  .parse("${dateController.text} $time");
+                              if (start.compareTo(DateTime.now()) < 0) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        "Start time must be after the current time!"),
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                                return "invalid";
                               }
                             }
                             return null;
@@ -121,25 +130,38 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   }
                                 });
                               },
-                              icon: Icon(Icons.access_time)),
+                              icon: const Icon(Icons.access_time)),
                         )
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   Expanded(
                       child: Column(
                     children: [
-                      TextPrimary(txt: "End Time"),
+                      const TextPrimary(txt: "End Time"),
                       CustomTextFormField(
                           readonly: true,
                           textController: endController,
                           validation: (time) {
                             if (time != null) {
-                              if (time == startController.text) {
-                                return "Invalid minutes";
+                              var end = DateFormat("dd/MM/yyyy hh:mm a")
+                                  .parse("${dateController.text} $time");
+                              var start = DateFormat("dd/MM/yyyy hh:mm a")
+                                  .parse("${dateController.text} ${startController.text}");
+
+                              if (end.compareTo(start) <= 0) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        "End time must be after start time!"),
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                                                                return "invalid";
+
                               }
                             }
                             return null;
@@ -155,12 +177,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   }
                                 });
                               },
-                              icon: Icon(Icons.access_time)))
+                              icon: const Icon(Icons.access_time)))
                     ],
                   ))
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
@@ -178,8 +200,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                     ? AppColores.yellow
                                     : AppColores.red,
                             child: index == selectNumber
-                                ? Icon(Icons.check)
-                                : SizedBox(),
+                                ? const Icon(Icons.check)
+                                : const SizedBox(),
                           ),
                         ),
                         onTap: () {
@@ -190,7 +212,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       );
                     }),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   CustomButton(
                       txt: "Create Task",
                       width: 170,
@@ -204,7 +226,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               startTime: startController.text,
                               endTime: endController.text,
                               date: dateController.text,
-                              iscomplet: false,
+                              isComplete: false,
                               color: selectNumber);
                           var taskBox = Hive.box('task');
                           taskBox.put(newTask.id, newTask);

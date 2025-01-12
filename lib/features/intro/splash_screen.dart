@@ -19,10 +19,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     var userBox = Hive.box('user');
+    var taskBox = Hive.box('task');
+
     Future.delayed(
       Duration(seconds: 3),
       () {
-        if (userBox.get("isUploaded")!=true) {
+        if (userBox.get("isUploaded") != true) {
           pushWithReplacement(context, UploadScreen());
         } else {
           pushWithReplacement(context, HomeScreen());

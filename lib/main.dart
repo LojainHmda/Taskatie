@@ -9,9 +9,9 @@ import 'features/intro/splash_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-   Hive.registerAdapter(TaskAdapter());
+  Hive.registerAdapter(TaskAdapter());
   await Hive.openBox('user');
-    await Hive.openBox('task');
+  await Hive.openBox('task');
 
   runApp(MyApp());
 }
@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(appBarTheme: AppBarTheme(backgroundColor: AppColores.primaryColor)),
+      theme: ThemeData(
+          appBarTheme: AppBarTheme(backgroundColor: AppColores.primaryColor),
+scaffoldBackgroundColor: AppColores.backGroundColor),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
     );

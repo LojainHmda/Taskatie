@@ -11,7 +11,7 @@ class TaskAdapter extends TypeAdapter<Task> {
         startTime: reader.readString(),
         endTime: reader.readString(),
         date: reader.readString(),
-        iscomplet: reader.readBool(),
+        isComplete: reader.readBool(),
         color: reader.readInt());
   }
 
@@ -27,7 +27,7 @@ class TaskAdapter extends TypeAdapter<Task> {
   writer.writeString(obj.startTime);
   writer.writeString(obj.endTime);
   writer.writeString(obj.date);
-  writer.writeBool(obj.iscomplet);
+  writer.writeBool(obj.isComplete);
   writer.writeInt(obj.color);
   }
 }

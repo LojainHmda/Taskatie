@@ -10,7 +10,10 @@ import 'package:tasktie/core/wigdets/custom_button.dart';
 import 'package:tasktie/core/wigdets/custom_row.dart';
 import 'package:intl/intl.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:tasktie/core/wigdets/list_item.dart';
 import 'package:tasktie/features/addTask/add_task_screen.dart';
+import 'package:tasktie/features/completedTasks/completed_tasks_screen.dart';
+import 'package:tasktie/features/profile/profile.dart';
 import 'package:tasktie/features/upload/upload_screen.dart';
 
 import '../../core/model/task_modek.dart';
@@ -23,9 +26,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  late var selectedValue;
-    var box= Hive.box('task');
+  var selectedValue = DateTime.now();
   Widget build(BuildContext context) {
     var userBox = Hive.box('user');
     return Scaffold(
@@ -35,9 +36,25 @@ class _HomeScreenState extends State<HomeScreen> {
             child: CustomRow(
               txt1: "Hello,${userBox.get('name')}",
               txt2: "Have a Nice day!",
-              widget: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: FileImage(File(userBox.get("image")))),
+              widget: Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        pushTo(context, CompletedTasks());
+                      },
+                      icon: const Icon(Icons.add_task_outlined,
+                          size: 35, color: AppColores.primaryColor)),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  GestureDetector(
+                    onTap: () => pushTo(context, ProfileScreen()),
+                    child: CircleAvatar(
+                        radius: 40,
+                        backgroundImage: FileImage(File(userBox.get("image")))),
+                  ),
+                ],
+              ),
             ),
           ),
           CustomRow(
@@ -46,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               widget: CustomButton(
                   txt: " + Add Task",
                   onPressed: () {
-                    pushTo(context, AddTaskScreen());
+                    pushTo(context, const AddTaskScreen());
                   },
                   width: 145,
                   height: 60)),
@@ -65,98 +82,71 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
               child: ValueListenableBuilder(
-                valueListenable: Hive.box("task").listenable(),
-                builder: (context, value, child) {
-                  var tasks =value.values.toList();
-               return ListView.builder(
-                            itemCount: tasks.length,
-                            itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                  child: Dismissible(
-                    key: UniqueKey(),
-                    onDismissed: (direction) {
-                      if(direction != DismissDirection.startToEnd){
-                        tasks[index].iscomplet=true;
-                         tasks[index].color=3;
-                      }
-                      else{
-                        value.deleteAt(index);
-                      }
-                      
-                    },
-                    background: Container(
-                      decoration: BoxDecoration(
-                          color: AppColores.red,
-                          borderRadius: BorderRadius.circular(10)),
-                      padding: EdgeInsets.only(left: 15, right: 15),
-                      alignment: Alignment.centerLeft,
-                      child: RotatedBox(
-                        quarterTurns: 3,
-                        child: Text(
-                          "delete",
-                          style: getTesxtStyle(),
-                        ),
-                      ),
-                    ),
-                    secondaryBackground: Container(
-                      padding: EdgeInsets.only(left: 15, right: 15),
-                      alignment: Alignment.centerRight,
-                      decoration: BoxDecoration(
-                          color: AppColores.green,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: RotatedBox(
-                        quarterTurns: -3,
-                        child: Text(
-                          "Done",
-                          style: getTesxtStyle(),
-                        ),
-                      ),
-                    ),
-                    child: ListItem(task: tasks[index],),
-                  ),
-                );
+                  valueListenable: Hive.box("task").listenable(),
+                  builder: (context, value, child) {
+                    var tasks = value.values.where(
+                      (element) {
+                        return (element.isComplete == false &&
+                            element.date ==
+                                DateFormat("dd/MM/yyyy").format(selectedValue));
+                      },
+                    ).toList();
+                    return ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 10, left: 10, right: 10),
+                          child: Dismissible(
+                            key: UniqueKey(),
+                            onDismissed: (direction) {
+                              if (direction != DismissDirection.startToEnd) {
+                                tasks[index].isComplete = true;
+                                value.put(tasks[index].id, tasks[index]);
+                              } else {
+                                value.delete(tasks[index].id);
+                              }
                             },
-                          );}
-              ))
+                            background: Container(
+                              decoration: BoxDecoration(
+                                  color: AppColores.red,
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              alignment: Alignment.centerLeft,
+                              child: RotatedBox(
+                                quarterTurns: 3,
+                                child: Text(
+                                  "delete",
+                                  style: getTesxtStyle(),
+                                ),
+                              ),
+                            ),
+                            secondaryBackground: Container(
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              alignment: Alignment.centerRight,
+                              decoration: BoxDecoration(
+                                  color: AppColores.green,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: RotatedBox(
+                                quarterTurns: -3,
+                                child: Text(
+                                  "Done",
+                                  style: getTesxtStyle(),
+                                ),
+                              ),
+                            ),
+                            child: ListItem(
+                              task: tasks[index],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }))
         ],
       ),
-    );
-  }
-}
-
-class ListItem extends StatelessWidget {
-  const ListItem({
-    super.key,
-    required this .task,
-  });
- 
-final Task task;
-  @override
-  Widget build(BuildContext context) {
-    return CustomRow(
-      icon: Icon(Icons.watch_later_outlined),
-      txt1: task.title,
-      txt2: "${task.startTime} to ${task.endTime}",
-      widget: Row(
-        children: [
-          Container(
-            height: 50,
-            width: 1.5,
-            color: AppColores.textColor,
-          ),
-          RotatedBox(
-            quarterTurns: 3,
-            child: Text(
-              "TODO",
-              style: getTesxtStyle(),
-            ),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-          color: task.color==0? AppColores.primaryColor :task.color==1?AppColores.yellow:task.color==2? AppColores.red:AppColores.green,
-          borderRadius: BorderRadius.circular(10)),
     );
   }
 }

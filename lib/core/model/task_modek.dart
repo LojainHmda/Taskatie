@@ -6,7 +6,7 @@ class Task {
   final String endTime;
   final String date;
   final int color;
-  final bool iscomplet;
+  bool isComplete;
 
   Task({
     required this.title,
@@ -15,9 +15,7 @@ class Task {
     required this.startTime,
     required this.endTime,
     required this.date,
-    required this.iscomplet,
+    required this.isComplete,
     required this.color,
   });
-
-  
 }
