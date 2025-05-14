@@ -1,16 +1,5 @@
 # tasktie
 
 A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![image](https://github.com/user-attachments/assets/b12bb71c-d540-4858-a730-63eb966cdcc4)
+![image](https://github.com/user-attachments/assets/4dec8fd2-ac8e-4d6a-b94c-8bf920e04e5a)
